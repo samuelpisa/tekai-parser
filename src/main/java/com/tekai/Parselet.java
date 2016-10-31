@@ -41,7 +41,7 @@ public abstract class Parselet {
      * Never returns null.
      * </p>
      */
-    protected String getMatch() {
+    protected String originalMatch() {
         return match == null ? "" : match;
     }
 
@@ -49,8 +49,13 @@ public abstract class Parselet {
      * Value matched by {@link #startingRegularExpression()} with no spaces around
      * @return
      */
-    protected String getMatchTrimmed() {
-        return getMatch().trim();
+    protected String originalMatchTrimmed() {
+        return originalMatch().trim();
+    }
+
+    protected String lastMatch() {
+        assert parser != null;
+        return parser.lastMatch();
     }
 
     protected Expression left() {
@@ -83,6 +88,11 @@ public abstract class Parselet {
 
     protected boolean cannotConsume(String regularExpression) {
         return !canConsume(regularExpression);
+    }
+
+    protected boolean couldConsume(String regularExpression) {
+        assert parser != null;
+        return parser.couldConsume(regularExpression);
     }
 
     protected boolean canConsume(String regularExpression) {

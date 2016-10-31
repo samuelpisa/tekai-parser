@@ -6,12 +6,15 @@ import java.util.List;
 
 public class Parser {
 
-    private final Source source;
+    private Source source;
 
     private List<Parselet> prefixParselets = new LinkedList<Parselet>();
     private List<Parselet> parselets = new LinkedList<Parselet>();
 
     // == Construction
+
+    public Parser() {
+    }
 
     public Parser(CharSequence source) {
         this.source = new Source(source);
@@ -27,19 +30,41 @@ public class Parser {
 
     // == Parse Engine ==
 
-    public Expression parse() {
-        return parse(0);
+    /**
+     * @throws UnparseableException
+     */
+    public Expression parse(CharSequence source) {
+        this.source = new Source(source);
+        return parse();
     }
 
-    public Expression parse(int currentPrecedence) {
+    /**
+     * @throws UnparseableException
+     */
+    public Expression parse() {
+        Expression result = parse(0);
+
+        if (source != null && !"".equals(source.sample().trim()))
+            throw new UnparseableException("There are things to parse, but no rule for it: \"" + source.sample() + "\"");
+
+        return result;
+    }
+
+    /**
+     * @throws UnparseableException
+     */
+    protected Expression parse(int currentPrecedence) {
+
+        if (source == null) return null;
+        if (source.isEmpty()) return null;
 
         Parselet currentParselet = findParseletIn(prefixParselets);
 
         if (currentParselet == null)
             if ("".equals(source.sample()))
-                throw new RuntimeException("Expected something to parse, but found end of source");
+                throw new UnparseableException("Expected something to parse, but found end of source");
             else
-                throw new RuntimeException("Could not find a expression to parse \"" + source.sample() + "\"");
+                throw new UnparseableException("Could not find a expression to parse \"" + source.sample() + "\"");
 
 
         consumeLastMatch();
@@ -77,6 +102,10 @@ public class Parser {
 
     public String lastMatch() {
         return source.lastMatch();
+    }
+
+    public boolean couldConsume(String regularExpression) {
+        return source.couldConsume(regularExpression);
     }
 
     public boolean canConsume(String regularExpression) {
