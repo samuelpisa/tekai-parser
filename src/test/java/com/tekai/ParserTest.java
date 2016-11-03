@@ -106,19 +106,19 @@ public class ParserTest {
 "  ([FROM]:FROM\n" +
 "    ([AS]:ALIAS [ACT12000]:IDENTIFIER [C120]:IDENTIFIER)\n" +
 "    ([INNER JOIN]:JOIN\n" +
-"      ([AS]:ALIAS [AXT04000]:IDENTIFIER [X040]:IDENTIFIER)\n"  +
+"      ([AS]:ALIAS [X4000]:IDENTIFIER [X040]:IDENTIFIER)\n"  +
 "      ([ON]:ON ([=]:OPERATOR [X040.idnome]:IDENTIFIER [C120.idnome]:IDENTIFIER)))\n" +
 "    ([INNER JOIN]:JOIN\n" +
-"      ([AS]:ALIAS [AXT02000]:IDENTIFIER [X020A]:IDENTIFIER)\n" +
+"      ([AS]:ALIAS [X2000]:IDENTIFIER [X020A]:IDENTIFIER)\n" +
 "      ([ON]:ON ([=]:OPERATOR [X020A.idparametro]:IDENTIFIER [C120.sitsis]:IDENTIFIER)))\n" +
 "    ([INNER JOIN]:JOIN\n" +
-"      ([AS]:ALIAS [AXT02000]:IDENTIFIER [X020B]:IDENTIFIER)\n" +
+"      ([AS]:ALIAS [X2000]:IDENTIFIER [X020B]:IDENTIFIER)\n" +
 "      ([ON]:ON ([=]:OPERATOR [X020B.idparametro]:IDENTIFIER [C120.sitcom]:IDENTIFIER)))\n" +
 "    ([INNER JOIN]:JOIN\n" +
-"      ([AS]:ALIAS [AXT02000]:IDENTIFIER [X020C]:IDENTIFIER)\n" +
+"      ([AS]:ALIAS [X2000]:IDENTIFIER [X020C]:IDENTIFIER)\n" +
 "      ([ON]:ON ([=]:OPERATOR [X020C.idparametro]:IDENTIFIER [C120.sitlas]:IDENTIFIER)))\n" +
 "    ([INNER JOIN]:JOIN\n" +
-"      ([AS]:ALIAS [AXT03000]:IDENTIFIER [X030]:IDENTIFIER)\n" +
+"      ([AS]:ALIAS [X3000]:IDENTIFIER [X030]:IDENTIFIER)\n" +
 "      ([ON]:ON ([=]:OPERATOR [X030.idcidade]:IDENTIFIER [X040.idcidade]:IDENTIFIER)))))";
 
         Pattern spaces = Pattern.compile("\n\\s+", Pattern.MULTILINE);
@@ -132,11 +132,11 @@ public class ParserTest {
             + "        data_acesso = '00/00/0000 00:00:00', "
             + "        X040.docto2 AS inscricao "
             + " FROM ACT12000 AS C120 "
-            + " INNER JOIN AXT04000 AS X040 ON X040.idnome = C120.idnome "
-            + "   INNER JOIN AXT02000 AS X020A ON X020A.idparametro = C120.sitsis "
-            + "   INNER JOIN AXT02000 AS X020B ON X020B.idparametro = C120.sitcom "
-            + "   INNER JOIN AXT02000 AS X020C ON X020C.idparametro = C120.sitlas "
-            + "   INNER JOIN AXT03000 AS X030  ON X030.idcidade     = X040.idcidade ");
+            + " INNER JOIN X4000 AS X040 ON X040.idnome = C120.idnome "
+            + "   INNER JOIN X2000 AS X020A ON X020A.idparametro = C120.sitsis "
+            + "   INNER JOIN X2000 AS X020B ON X020B.idparametro = C120.sitcom "
+            + "   INNER JOIN X2000 AS X020C ON X020C.idparametro = C120.sitlas "
+            + "   INNER JOIN X3000 AS X030  ON X030.idcidade     = X040.idcidade ");
      }
 
      @Test
@@ -154,10 +154,10 @@ public class ParserTest {
 
      @Test
     public void TestCase(){
-        assertParsing("([SQL]:SQL ([SELECT]:SELECT ([CASE]:CASE [column]:IDENTIFIER ([WHEN]:WHEN [1]:NUMBER ([THEN]:THEN ['Aguarda DistribuiÃ§Ã£o']:STRING)) ([WHEN]:WHEN [2]:NUMBER ([THEN]:THEN ['Em AnÃ¡lise']:STRING)) ([ELSE]:ELSE ['']:STRING) [END]:END)) ([FROM]:FROM ([as]:ALIAS [sat00100]:IDENTIFIER [sa001]:IDENTIFIER)))",
+        assertParsing("([SQL]:SQL ([SELECT]:SELECT ([CASE]:CASE [column]:IDENTIFIER ([WHEN]:WHEN [1]:NUMBER ([THEN]:THEN ['waiting']:STRING)) ([WHEN]:WHEN [2]:NUMBER ([THEN]:THEN ['ok']:STRING)) ([ELSE]:ELSE ['']:STRING) [END]:END)) ([FROM]:FROM ([as]:ALIAS [sat00100]:IDENTIFIER [sa001]:IDENTIFIER)))",
               " SELECT  CASE column"
-            + " WHEN 1  THEN  'Aguarda DistribuiÃ§Ã£o'"
-            + " WHEN 2  THEN  'Em AnÃ¡lise'"
+            + " WHEN 1  THEN  'waiting'"
+            + " WHEN 2  THEN  'ok'"
             + " ELSE ''  END "
             + " FROM sat00100 as sa001");
 
@@ -184,11 +184,11 @@ public class ParserTest {
 
      @Test
      public void SelectGroup(){
-          assertParsing("([SQL]:SQL ([SELECT]:SELECT [DISTINCT]:DISTINCT [ax050.idinterno]:IDENTIFIER [ax050.descricao]:IDENTIFIER ([||]:CONCAT ([=]:OPERATOR ['sistema']:STRING ([RTRIM]:FUNCTION [ax050.idinterno]:IDENTIFIER)) [' - ']:STRING ([RTRIM]:FUNCTION [ax050.descricao]:IDENTIFIER))) ([FROM]:FROM ([AS]:ALIAS [AXT05000]:IDENTIFIER [ax050]:IDENTIFIER)) ([WHERE]:WHERE ([like]:LIKE [ax050.Descricao]:IDENTIFIER ['SERVIÇOS DE TI%']:STRING)) ([GROUP BY]:GROUP [column1]:IDENTIFIER [column2]:IDENTIFIER))",
+          assertParsing("([SQL]:SQL ([SELECT]:SELECT [DISTINCT]:DISTINCT [ax050.idinterno]:IDENTIFIER [ax050.descricao]:IDENTIFIER ([||]:CONCAT ([=]:OPERATOR ['sistema']:STRING ([RTRIM]:FUNCTION [ax050.idinterno]:IDENTIFIER)) [' - ']:STRING ([RTRIM]:FUNCTION [ax050.descricao]:IDENTIFIER))) ([FROM]:FROM ([AS]:ALIAS [X5000]:IDENTIFIER [ax050]:IDENTIFIER)) ([WHERE]:WHERE ([like]:LIKE [ax050.Descricao]:IDENTIFIER ['TI%']:STRING)) ([GROUP BY]:GROUP [column1]:IDENTIFIER [column2]:IDENTIFIER))",
                 "SELECT DISTINCT ax050.idinterno, ax050.descricao,    "
             + "                        'sistema' = RTRIM(ax050.idinterno) || ' - ' || RTRIM(ax050.descricao)    "
-            + "           FROM AXT05000 AS ax050    "
-            + "            WHERE ax050.Descricao like 'SERVIÇOS DE TI%'  "
+            + "           FROM X5000 AS ax050    "
+            + "            WHERE ax050.Descricao like 'TI%'  "
             + " GROUP BY column1, column2");
      }
 
