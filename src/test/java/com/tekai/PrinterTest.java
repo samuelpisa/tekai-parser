@@ -31,51 +31,51 @@ public class PrinterTest {
 
     @Test
     public void testFrom(){
-        sql = "SELECT campo FROM tabela";
+        sql = "SELECT column FROM table";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT tabela.xx10 AS campo1, campo2,  campo3  FROM  tabela as tb1, tabela3";
+        sql = "SELECT table.xx10 AS column1, column2,  column3  FROM  table as tb1, table3";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT DISTINCT campo FROM tabela";
+        sql = "SELECT DISTINCT column FROM table";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void functions(){
-        sql = "SELECT getdate(), campo, campo2,  campo3  FROM  tabela, tabela3";
+        sql = "SELECT getdate(), column, column2,  column3  FROM  table, table3";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT POSITION('abc' IN campo2) FROM  tabela";
+        sql = "SELECT POSITION('abc' IN column2) FROM  table";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT cast(campo3 as VARCHAR) FROM  tabela";
+        sql = "SELECT cast(column3 as VARCHAR) FROM  table";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void testWhere(){
-        sql = "SELECT campo FROM tabela where campo = 2";
+        sql = "SELECT column FROM table where column = 2";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT trim(campo), campo FROM tabela, tabela2 WHERE tabela.campo = 2 AND tabela.id = 3";
+        sql = "SELECT trim(column), column FROM table, table2 WHERE table.column = 2 AND table.id = 3";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void testConcat(){
-        sql = "SELECT campo1 || 'string' || abc(campo3, campo4) FROM tabela";
+        sql = "SELECT column1 || 'string' || abc(column3, column4) FROM table";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void testOrder(){
-        sql = "SELECT  * FROM tabela WHERE campo = 2 AND campo2 = campo1 ORDER BY campo2, campo3, campo4";
+        sql = "SELECT  * FROM table WHERE column = 2 AND column2 = column1 ORDER BY column2, column3, column4";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT  * FROM tabela WHERE campo = 2 AND campo2 = campo1 ORDER BY campo2, campo3 DESC, campo4 DESC";
+        sql = "SELECT  * FROM table WHERE column = 2 AND column2 = column1 ORDER BY column2, column3 DESC, column4 DESC";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void testLimit(){
-        sql = "SELECT  * FROM tabela WHERE campo = 2  LIMIT 10";
+        sql = "SELECT  * FROM table WHERE column = 2  LIMIT 10";
         assertEquals(sql, print(p.parse(sql)));
-        sql = "SELECT  * FROM tabela WHERE campo = :id ORDER BY campo2 LIMIT 10 OFFSET 0";
+        sql = "SELECT  * FROM table WHERE column = :id ORDER BY column2 LIMIT 10 OFFSET 0";
         assertEquals(sql, print(p.parse(sql)));
     }
 
@@ -83,17 +83,17 @@ public class PrinterTest {
     public void testGroup(){
         sql = "SELECT ax050.idinterno, ax050.descricao,    "
             + "                        'sistema' = RTRIM(ax050.idinterno) || ' - ' || RTRIM(ax050.descricao)    "
-            + "           FROM AXT05000 AS ax050    "
-            + "            WHERE ax050.Descricao like 'SERVIÇOS DE TI%'  "
-            + " GROUP BY campo1, campo2";
+            + "           FROM FX5000 AS ax050    "
+            + "            WHERE ax050.Descricao like 'TI%'  "
+            + " GROUP BY column1, column2";
         assertEquals(sql, print(p.parse(sql)));
     }
 
     @Test
     public void testCase(){
-        sql = "SELECT  CASE campo"
-            + " WHEN 1  THEN  'Aguarda DistribuiÃ§Ã£o'"
-            + " WHEN 2  THEN  'Em AnÃ¡lise'"
+        sql = "SELECT  CASE column"
+            + " WHEN 1  THEN  'fail'"
+            + " WHEN 2  THEN  'ok'"
             + " ELSE ''  END "
             + " FROM sat00100 as sa001";
         assertEquals(sql, print(p.parse(sql)));
@@ -101,7 +101,7 @@ public class PrinterTest {
                 + "WHEN 1 THEN msg = 'one or two' "
                 + "ELSE msg = 'other value than one or two'"
                 + "END "
-                + "FROM TABELA";
+                + "FROM table";
         assertEquals(sql, print(p.parse(sql)));
     }
 
@@ -117,11 +117,11 @@ public class PrinterTest {
             + "        data_acesso = '00/00/0000 00:00:00', "
             + "        X040.docto2 AS inscricao "
             + " FROM ACT12000 AS C120"
-            + " INNER JOIN AXT04000 AS X040 ON X040.idnome = C120.idnome "
-            + "   INNER JOIN AXT02000 AS X020A ON X020A.idparametro = C120.sitsis "
-            + "   INNER JOIN AXT02000 AS X020B ON X020B.idparametro = C120.sitcom "
-            + "   INNER JOIN AXT02000 AS X020C ON X020C.idparametro = C120.sitlas "
-            + "   INNER JOIN AXT03000 AS X030  ON X030.idcidade     = X040.idcidade";
+            + " INNER JOIN FX4000 AS X040 ON X040.idnome = C120.idnome "
+            + "   INNER JOIN FX2000 AS X020A ON X020A.idparametro = C120.sitsis "
+            + "   INNER JOIN FX2000 AS X020B ON X020B.idparametro = C120.sitcom "
+            + "   INNER JOIN FX2000 AS X020C ON X020C.idparametro = C120.sitlas "
+            + "   INNER JOIN FX3000 AS X030  ON X030.idcidade     = X040.idcidade";
         assertEquals(sql, print(p.parse(sql)));
     }
 
@@ -133,7 +133,7 @@ public class PrinterTest {
 
     @Test
     public void subselect(){
-        sql = "SELECT * from tabela where not exists(SELECT * from tabela)";
+        sql = "SELECT * from table where not exists(SELECT * from table)";
         assertEquals(sql, print(p.parse(sql)));
     }
 
